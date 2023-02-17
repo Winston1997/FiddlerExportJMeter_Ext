@@ -27,9 +27,6 @@ namespace FiddlerExtensions
 					text,
 					this.Path
 				});
-
-				
-
 				bool flag = this.session.oRequest.headers.Exists("Content-Type");
 				bool flag2 = this.session.oFlags.ContainsKey("ui-comments");
 				if (flag2)  //判断是否存在键“ui-comments”，给请求命名为 id+"-"+comment(fiddler中你给请求的备注)  例如：25-登录
@@ -42,53 +39,51 @@ namespace FiddlerExtensions
                     }
                 }
 
-				//以下开始为Xml的请求段（逐行写入Append后面的部分）  
-
-				stringBuilder.Append(string.Format("<HTTPSamplerProxy guiclass=\"HttpTestSampleGui\" testclass=\"HTTPSamplerProxy\" testname=\"{0}\" enabled=\"true\">", arg));    //arg是获取到的 fiddler中每个请求你设置的Comment
+				//根据参数生成xml格式字段
+				stringBuilder.Append(string.Format("<HTTPSamplerProxy guiclass=\"HttpTestSampleGui\" testclass=\"HTTPSamplerProxy\" testname=\"{0}\" enabled=\"true\">", arg));    //转事务名称，arg是获取到的 fiddler中每个请求你添加的Comment
 				stringBuilder.Append("<boolProp name=\"HTTPSampler.postBodyRaw\">true</boolProp>");
 				stringBuilder.Append("<elementProp name=\"HTTPsampler.Arguments\" elementType=\"Arguments\">");
 				stringBuilder.Append("<collectionProp name=\"Arguments.arguments\">");
 				stringBuilder.Append("<elementProp name=\"\" elementType=\"HTTPArgument\">");
 				stringBuilder.Append("<boolProp name=\"HTTPArgument.always_encode\">false</boolProp>");
-				//以上为Xml的固定部分
 
-				if (flag)    //判断请求的headers里是否存在Content-Type
+				if (flag)    //判断fiddler请求的headers里是否存在Content-Type
 				{
 					if (this.session.oRequest["Content-Type"].Contains("multipart/form-data; boundary"))     //判断请求的Content-Type中是否包含multipart/form-data; boundary 字段来判断是否是上传请求
 					{
-						stringBuilder.Append(string.Format("<stringProp name=\"Argument.value\">{0}</stringProp>", "ERROR INFO:this is upload request"));   //如果是上传请求，添加<stringProp name=\"Argument.value\">ERROR INFO:this is upload request</stringProp>
+						stringBuilder.Append(string.Format("<stringProp name=\"Argument.value\">{0}</stringProp>", "错误：这是上传请求，请手动编辑取样器参数"));   //如果是上传请求，在body中指出报错
 					}
 					else
 					{
-						stringBuilder.Append(string.Format("<stringProp name=\"Argument.value\">{0}</stringProp>", this.RequestBody));   //如果不是上传请求，则在xml中添加<stringProp name=\"Argument.value\">{0}</stringProp>
+						stringBuilder.Append(string.Format("<stringProp name=\"Argument.value\">{0}</stringProp>", this.RequestBody));   //如果不是上传请求，则写入fiddler请求的body部分
 					}
 				}
 				else     
 				{
-					stringBuilder.Append(string.Format("<stringProp name=\"Argument.value\">{0}</stringProp>", this.RequestBody));   //如果没有Content-Type，添加左侧字段
+					stringBuilder.Append(string.Format("<stringProp name=\"Argument.value\">{0}</stringProp>", this.RequestBody));   //如果没有Content-Type，则直接写入请求的body部分
 				}
 
-				//以下为转换请求为xml的过程，转换urischeme、path、httpmethod
+				//以下为转换请求为xml的过程
 				stringBuilder.Append("<stringProp name=\"Argument.metadata\">=</stringProp>");
 				stringBuilder.Append("</elementProp>");
 				stringBuilder.Append("</collectionProp>");
 				stringBuilder.Append("</elementProp>");
-				stringBuilder.Append(string.Format("<stringProp name=\"HTTPSampler.domain\">{0}</stringProp>", this.session.hostname));
-				stringBuilder.Append(string.Format("<stringProp name=\"HTTPSampler.port\">{0}</stringProp>", this.Port));
-				stringBuilder.Append("<stringProp name=\"HTTPSampler.connect_timeout\"></stringProp>");
+				stringBuilder.Append(string.Format("<stringProp name=\"HTTPSampler.domain\">{0}</stringProp>", this.session.hostname)); //转域名
+				stringBuilder.Append(string.Format("<stringProp name=\"HTTPSampler.port\">{0}</stringProp>", this.Port));//转端口
+                stringBuilder.Append("<stringProp name=\"HTTPSampler.connect_timeout\"></stringProp>");
 				stringBuilder.Append("<stringProp name=\"HTTPSampler.response_timeout\"></stringProp>");
-				stringBuilder.Append(string.Format("<stringProp name=\"HTTPSampler.protocol\">{0}</stringProp>", this.session.oRequest.headers.UriScheme));
-				stringBuilder.Append("<stringProp name=\"HTTPSampler.contentEncoding\">utf-8</stringProp>");
-				stringBuilder.Append(string.Format("<stringProp name=\"HTTPSampler.path\">{0}</stringProp>", this.Path));
-				stringBuilder.Append(string.Format("<stringProp name=\"HTTPSampler.method\">{0}</stringProp>", this.session.oRequest.headers.HTTPMethod.ToUpper()));
-				stringBuilder.Append("<boolProp name=\"HTTPSampler.follow_redirects\">true</boolProp>");
+				stringBuilder.Append(string.Format("<stringProp name=\"HTTPSampler.protocol\">{0}</stringProp>", this.session.oRequest.headers.UriScheme));//转协议
+                stringBuilder.Append("<stringProp name=\"HTTPSampler.contentEncoding\">utf-8</stringProp>");
+				stringBuilder.Append(string.Format("<stringProp name=\"HTTPSampler.path\">{0}</stringProp>", this.Path));//转地址
+                stringBuilder.Append(string.Format("<stringProp name=\"HTTPSampler.method\">{0}</stringProp>", this.session.oRequest.headers.HTTPMethod.ToUpper()));//转请求方式
+                stringBuilder.Append("<boolProp name=\"HTTPSampler.follow_redirects\">true</boolProp>");
 				stringBuilder.Append("<boolProp name=\"HTTPSampler.auto_redirects\">false</boolProp>");
 				stringBuilder.Append("<boolProp name=\"HTTPSampler.use_keepalive\">true</boolProp>");
 				stringBuilder.Append("<boolProp name=\"HTTPSampler.DO_MULTIPART_POST\">false</boolProp>");
 				stringBuilder.Append("<boolProp name=\"HTTPSampler.monitor\">false</boolProp>");
 				stringBuilder.Append("<stringProp name=\"HTTPSampler.embedded_url_re\"></stringProp>");
-				stringBuilder.Append(string.Format("<stringProp name=\"TestPlan.comments\">{0}</stringProp>", text));
-				stringBuilder.Append("</HTTPSamplerProxy>");
+				stringBuilder.Append("<stringProp name=\"TestPlan.comments\"></stringProp>");
+                stringBuilder.Append("</HTTPSamplerProxy>");
 
 				//以下为对线程组所进行的处理
 				bool flag3 = true;
@@ -100,20 +95,37 @@ namespace FiddlerExtensions
 				bool flag5 = flag || flag3 || flag4;
 				if (flag5)  //当请求中referer为空时或请求的headers包含字段“X-Requested-With”或者“Content-Type”时，分三种情况添加xml语句——判断该请求是否要为他添加HTTP信息头管理器
 				{
-					stringBuilder.Append("<hashTree>     <HeaderManager guiclass=\"HeaderPanel\" testclass=\"HeaderManager\" testname=\"HTTP信息头管理器\" enabled=\"true\">             <collectionProp name=\"HeaderManager.headers\">");    //为该请求添加一个信息头管理器
+                    //添加一个信息头管理器
+                    stringBuilder.Append("" +
+						"<hashTree>" +
+						"<HeaderManager guiclass=\"HeaderPanel\" testclass=\"HeaderManager\" testname=\"HTTP信息头管理器\" enabled=\"true\">" +
+						"<collectionProp name=\"HeaderManager.headers\">");   
 					if (flag3)   //referer  不为空时
 					{
-						stringBuilder.Append(string.Format("<elementProp name=\"\" elementType=\"Header\">                <stringProp name=\"Header.name\">Referer</stringProp>                 <stringProp name=\"Header.value\">{0}</stringProp>               </elementProp>", this.MyReferer));
+						stringBuilder.Append(string.Format("" +
+							"<elementProp name=\"\" elementType=\"Header\">" +
+							"<stringProp name=\"Header.name\">Referer</stringProp>" +
+							"<stringProp name=\"Header.value\">{0}</stringProp>" +
+							"</elementProp>", this.MyReferer));	//转referer参数
 					}
 					if (flag4)  //当请求的headers包含字段“X-Requested-With”时
 					{
-						stringBuilder.Append(string.Format("<elementProp name=\"\" elementType=\"Header\">                 <stringProp name=\"Header.name\">X-Requested-With</stringProp>                 <stringProp name=\"Header.value\">{0}</stringProp>              </elementProp>", this.session.oRequest["X-Requested-With"]));
-					}
+						stringBuilder.Append(string.Format("" +
+							"<elementProp name=\"\" elementType=\"Header\">" +
+							"<stringProp name=\"Header.name\">X-Requested-With</stringProp>" +
+							"<stringProp name=\"Header.value\">{0}</stringProp>" +
+							"</elementProp>", this.session.oRequest["X-Requested-With"])); //转X-Requested-With参数
+                    }
 					if (flag)   //当请求的headers包含字段“Content-Type”时
 					{
-						stringBuilder.Append(string.Format("<elementProp name=\"\" elementType=\"Header\">                 <stringProp name=\"Header.name\">Content-Type</stringProp>                <stringProp name=\"Header.value\">{0}</stringProp>              </elementProp>", this.session.oRequest["Content-Type"]));
-					}
-					stringBuilder.Append("</collectionProp>          </HeaderManager>");
+						stringBuilder.Append(string.Format("" +
+							"<elementProp name=\"\" elementType=\"Header\">" +
+							"<stringProp name=\"Header.name\">Content-Type</stringProp>" +
+							"<stringProp name=\"Header.value\">{0}</stringProp>" +
+							"</elementProp>", this.session.oRequest["Content-Type"]));  //转Content-Type参数
+                    }
+					stringBuilder.Append("</collectionProp>" +
+					"</HeaderManager>");
 				}
 				stringBuilder.Append("<hashTree/>");
 				if (flag5)  //当请求中referer为空时或请求的headers包含字段“X-Requested-With”或者“Content-Type”时
@@ -125,7 +137,7 @@ namespace FiddlerExtensions
 			//一个请求Xml转换完毕
 		}
 
-		private string Path		//获取路径
+		private string Path		//获取地址
 		{
 			get
 			{

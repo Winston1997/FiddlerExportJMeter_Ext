@@ -24,3 +24,10 @@ C:\Users\Administrator\Downloads\fiddler导出jmeter脚本解决方案\ImportExp
 C:\Users\Administrator\Downloads\fiddler导出jmeter脚本解决方案\ImportExport\bin\Debug\JmeterExporter.dll
 C:\Users\Administrator\Downloads\fiddler导出jmeter脚本解决方案\ImportExport\bin\Debug\JmeterExporter.pdb
 C:\Users\Administrator\Downloads\fiddler导出jmeter脚本解决方案\ImportExport\obj\Debug\JmeterExporter.csproj.CopyComplete
+D:\Myproject\fiddler导出jmeter脚本二开dll\ImportExport\bin\Debug\JmeterExporter.dll
+D:\Myproject\fiddler导出jmeter脚本二开dll\ImportExport\bin\Debug\JmeterExporter.pdb
+D:\Myproject\fiddler导出jmeter脚本二开dll\ImportExport\obj\Debug\JmeterExporter.csproj.AssemblyReference.cache
+D:\Myproject\fiddler导出jmeter脚本二开dll\ImportExport\obj\Debug\JmeterExporter.csproj.CoreCompileInputs.cache
+D:\Myproject\fiddler导出jmeter脚本二开dll\ImportExport\obj\Debug\JmeterExporter.csproj.CopyComplete
+D:\Myproject\fiddler导出jmeter脚本二开dll\ImportExport\obj\Debug\JmeterExporter.dll
+D:\Myproject\fiddler导出jmeter脚本二开dll\ImportExport\obj\Debug\JmeterExporter.pdb

@@ -1,6 +1,6 @@
 # Fiddler 导出 JMeter脚本dll 二开
 ## 使用方法：
-1. 将`bin\Debug\JmeterExporter.dll`文件</br>复制到Fiddler安装目录`C:\Users\Administrator\AppData\Local\Programs\Fiddler\ImportExport`</br>
+1. 将`bin\Debug\Epoint_JMeter_Export.dll`文件</br>复制到Fiddler安装目录`C:\Users\Administrator\AppData\Local\Programs\Fiddler\ImportExport`</br>
 ![1](https://github.com/Winston1997/FiddlerExportJMeter_Ext/blob/master/IMG/1.png)</br>
 2. 打开fiddler，选择如下方式进行导出</br>
 ![2](https://github.com/Winston1997/FiddlerExportJMeter_Ext/blob/master/IMG/2.png)</br>

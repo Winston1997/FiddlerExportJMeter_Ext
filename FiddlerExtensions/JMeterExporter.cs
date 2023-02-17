@@ -5,7 +5,7 @@ using System.IO;
 using System.Text;
 namespace FiddlerExtensions
 {
-	[ProfferFormat("JMeter_Epoint性能", "JMeter .jmx Format")]
+	[ProfferFormat("Epoint_JMeter_Exporter", "将fiddler封包导出到jmx文件")]
 	public class JMeterExporter : ISessionExporter, IDisposable
 	{
 		//fiddler配置信息导出模块

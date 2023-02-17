@@ -13,7 +13,6 @@ namespace FiddlerExtensions
 			get
 			{
 				//创建xml，下面为jmx的开头部分
-
 				StringBuilder stringBuilder = new StringBuilder();
 				stringBuilder.Append("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n");  
 				XDocument xDocument = XDocument.Parse(this.Xml.ToString());
@@ -26,9 +25,9 @@ namespace FiddlerExtensions
 			get
 			{
 				StringBuilder stringBuilder = new StringBuilder();
-				stringBuilder.Append("<jmeterTestPlan version=\"1.2\" properties=\"2.3\">");   //向xml写入指定版本号
-				stringBuilder.Append(this.sessionList.Xml);     //添加HTTPSamplerProxy里面所有转换的语句
-				stringBuilder.Append("</jmeterTestPlan>");		//结尾
+				stringBuilder.Append("<jmeterTestPlan version=\"1.2\" properties=\"2.3\">");   //jmx文件头
+				stringBuilder.Append(this.sessionList.Xml);     //调用HTTPSamplerProxy向xml写入特定规则的组件
+				stringBuilder.Append("</jmeterTestPlan>");		//jmx文件尾
 				return stringBuilder.ToString();
 			}
 		}

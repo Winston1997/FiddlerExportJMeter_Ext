@@ -1,0 +1,7 @@
+D:\Myproject\fiddler导出jmeter脚本二开dll\ImportExport\obj\Debug\Eopint_Jmeter_Export.csproj.AssemblyReference.cache
+D:\Myproject\fiddler导出jmeter脚本二开dll\ImportExport\obj\Debug\Eopint_Jmeter_Export.csproj.CoreCompileInputs.cache
+D:\Myproject\fiddler导出jmeter脚本二开dll\ImportExport\obj\Debug\Eopint_Jmeter_Export.csproj.CopyComplete
+D:\Myproject\fiddler导出jmeter脚本二开dll\ImportExport\bin\Debug\Epoint_JMeter_Export.dll
+D:\Myproject\fiddler导出jmeter脚本二开dll\ImportExport\bin\Debug\Epoint_JMeter_Export.pdb
+D:\Myproject\fiddler导出jmeter脚本二开dll\ImportExport\obj\Debug\Epoint_JMeter_Export.dll
+D:\Myproject\fiddler导出jmeter脚本二开dll\ImportExport\obj\Debug\Epoint_JMeter_Export.pdb
