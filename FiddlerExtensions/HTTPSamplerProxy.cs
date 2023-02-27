@@ -14,19 +14,21 @@ namespace FiddlerExtensions
 			get
 			{
 				      
-                //给线程组下的请求命名 格式为： id+“-”+ip和端口+path   例如：25-180.100.213.74/TPBidder/rest///memberLoginAction/page_load?isCommondto=true
+                //给线程组下的请求命名 格式为： id+“-”+ip和端口+path   例如：25-180.100.213.74/TPBidder/rest/memberLoginAction/page_load?isCommondto=true
                 StringBuilder stringBuilder = new StringBuilder();
 				string host = this.session.host;
-				string text = host;
-				string oldValue = ":" + this.Port;
+				string url = this.Path;
+				string oldValue = "://" + this.Port;
 				host.Replace(oldValue, "");
 				string arg = string.Concat(new object[]
 				{
 					this.session.id,
 					"-",
-					text,
-					this.Path
-				});
+                    this.session.oRequest.headers.UriScheme,
+                    "://",
+                    host,
+					url.Substring(0, url.IndexOf("?"))
+                });
 				bool flag = this.session.oRequest.headers.Exists("Content-Type");
 				bool flag2 = this.session.oFlags.ContainsKey("ui-comments");
 				if (flag2)  //判断是否存在键“ui-comments”，给请求命名为 id+"-"+comment(fiddler中你给请求的备注)  例如：25-登录
@@ -35,12 +37,12 @@ namespace FiddlerExtensions
 					if (!text2.Contains("[#") && text2 != null && !(text2 == ""))
 					{
                         //arg = this.session.id + "-" + text2;//
-                        arg = text2 + "-" + this.Path;
+                        arg = text2 + "-" + this.session.oRequest.headers.UriScheme + "://"+ this.session.host + url.Substring(0, url.IndexOf("?"));
                     }
                 }
 
 				//根据参数生成xml格式字段
-				stringBuilder.Append(string.Format("<HTTPSamplerProxy guiclass=\"HttpTestSampleGui\" testclass=\"HTTPSamplerProxy\" testname=\"{0}\" enabled=\"true\">", arg));    //转事务名称，arg是获取到的 fiddler中每个请求你添加的Comment
+				stringBuilder.Append(string.Format("<HTTPSamplerProxy guiclass=\"HttpTestSampleGui\" testclass=\"HTTPSamplerProxy\" testname=\"{0}\" enabled=\"true\">", arg));    //转取样器  名称，arg是获取到的 fiddler中每个请求你添加的Comment
 				stringBuilder.Append("<boolProp name=\"HTTPSampler.postBodyRaw\">true</boolProp>");
 				stringBuilder.Append("<elementProp name=\"HTTPsampler.Arguments\" elementType=\"Arguments\">");
 				stringBuilder.Append("<collectionProp name=\"Arguments.arguments\">");
@@ -71,7 +73,7 @@ namespace FiddlerExtensions
 				stringBuilder.Append(string.Format("<stringProp name=\"HTTPSampler.domain\">{0}</stringProp>", this.session.hostname)); //转域名
 				stringBuilder.Append(string.Format("<stringProp name=\"HTTPSampler.port\">{0}</stringProp>", this.Port));//转端口
                 stringBuilder.Append("<stringProp name=\"HTTPSampler.connect_timeout\"></stringProp>");
-				stringBuilder.Append("<stringProp name=\"HTTPSampler.response_timeout\"></stringProp>");
+                stringBuilder.Append("<stringProp name=\"HTTPSampler.response_timeout\"></stringProp>");
 				stringBuilder.Append(string.Format("<stringProp name=\"HTTPSampler.protocol\">{0}</stringProp>", this.session.oRequest.headers.UriScheme));//转协议
                 stringBuilder.Append("<stringProp name=\"HTTPSampler.contentEncoding\">utf-8</stringProp>");
 				stringBuilder.Append(string.Format("<stringProp name=\"HTTPSampler.path\">{0}</stringProp>", this.Path));//转地址
@@ -82,7 +84,8 @@ namespace FiddlerExtensions
 				stringBuilder.Append("<boolProp name=\"HTTPSampler.DO_MULTIPART_POST\">false</boolProp>");
 				stringBuilder.Append("<boolProp name=\"HTTPSampler.monitor\">false</boolProp>");
 				stringBuilder.Append("<stringProp name=\"HTTPSampler.embedded_url_re\"></stringProp>");
-				stringBuilder.Append("<stringProp name=\"TestPlan.comments\"></stringProp>");
+				string arg3 = this.session.oRequest.headers.UriScheme + "://" + this.session.host + this.Path;
+                stringBuilder.Append(string.Format("<stringProp name=\"TestPlan.comments\">{0}</stringProp>",arg3));
                 stringBuilder.Append("</HTTPSamplerProxy>");
 
 				//以下为对线程组所进行的处理

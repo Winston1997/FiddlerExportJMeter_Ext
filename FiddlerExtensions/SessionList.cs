@@ -1,6 +1,8 @@
 using Fiddler;
 using System;
 using System.Text;
+using System.Xml.Linq;
+
 namespace FiddlerExtensions
 {
 	public class SessionList
@@ -27,9 +29,27 @@ namespace FiddlerExtensions
 						"</elementProp>" +
 						"<stringProp name=\"TestPlan.user_define_classpath\"></stringProp>" +
 						"</TestPlan>");
+					//创建请求默认值组件
+					stringBuilder.Append("" +
+						"<hashTree>" +
+						"<ConfigTestElement guiclass =\"HttpDefaultsGui\" testclass=\"ConfigTestElement\" testname=\"HTTP请求默认值(已配置127.0.0.1:8888)\" enabled=\"false\">" +
+						"<elementProp name =\"HTTPsampler.Arguments\" elementType=\"Arguments\" guiclass=\"HTTPArgumentsPanel\" testclass=\"Arguments\" testname=\"用户定义的变量\" enabled=\"true\">" +
+						"<collectionProp name =\"Arguments.arguments\"/>" +
+						"</elementProp>" +
+						"<stringProp name =\"HTTPSampler.domain\"></stringProp>" +
+						"<stringProp name =\"HTTPSampler.port\"></stringProp>" +
+						"<stringProp name =\"HTTPSampler.protocol\"></stringProp>" +
+						"<stringProp name =\"HTTPSampler.contentEncoding\"></stringProp>" +
+						"<stringProp name =\"HTTPSampler.path\"></stringProp>" +
+						"<stringProp name =\"HTTPSampler.concurrentPool\">6</stringProp>" +
+						"<stringProp name =\"HTTPSampler.proxyHost\">127.0.0.1</stringProp>" +
+						"<stringProp name =\"HTTPSampler.proxyPort\">8888</stringProp>" +
+						"<stringProp name =\"HTTPSampler.connect_timeout\"></stringProp>" +
+						"<stringProp name =\"HTTPSampler.response_timeout\"></stringProp>" +
+						"</ConfigTestElement>");
                     //创建HTTP缓存管理器
                     stringBuilder.Append("" +
-						"<hashTree>" +
+                        "<hashTree/>" +
 						"<CacheManager guiclass=\"CacheManagerGui\" testclass=\"CacheManager\" testname=\"HTTP缓存管理器\" enabled=\"true\">" +
 						"<boolProp name=\"clearEachIteration\">false</boolProp>" +
 						"<boolProp name=\"useExpires\">true</boolProp>" +
@@ -53,13 +73,13 @@ namespace FiddlerExtensions
 						"<stringProp name=\"Argument.name\">InfluxDB_Host</stringProp>" +
 						"<stringProp name=\"Argument.value\">192.168.200.219</stringProp>" +
 						"<stringProp name=\"Argument.metadata\">=</stringProp>" +
-						"<stringProp name=\"Argument.desc\">【后端监听器参数】默认值为192.168.200.219</stringProp>" +
+                        "<stringProp name=\"Argument.desc\">【后端监听器参数】默认值为192.168.200.219（项目组远程压测机本地部署为127.0.0.1）</stringProp>" +
 						"</elementProp>" +
 						"<elementProp name=\"DataBase\" elementType=\"Argument\">" +
 						"<stringProp name=\"Argument.name\">DataBase</stringProp>" +
 						"<stringProp name=\"Argument.value\">jmeter</stringProp>" +
 						"<stringProp name=\"Argument.metadata\">=</stringProp>" +
-						"<stringProp name=\"Argument.desc\">【后端监听器参数】默认值为jmeter</stringProp>" +
+                        "<stringProp name=\"Argument.desc\">【后端监听器参数】修改为你的数据库库名（项目组远程压测机本地部署为jmeter）</stringProp>" +
 						"</elementProp>" +
 						"<elementProp name=\"ProjectName\" elementType=\"Argument\">" +
 						"<stringProp name=\"Argument.name\">ProjectName</stringProp>" +
