@@ -1,6 +1,7 @@
 using Fiddler;
 using System;
 using System.Text;
+using System.Xml;
 using System.Xml.Linq;
 namespace FiddlerExtensions
 {
@@ -14,8 +15,10 @@ namespace FiddlerExtensions
 			{
 				//创建xml，下面为jmx的开头部分
 				StringBuilder stringBuilder = new StringBuilder();
-				stringBuilder.Append("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n");  
+				stringBuilder.Append("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n");
 				XDocument xDocument = XDocument.Parse(this.Xml.ToString());
+				//XmlDocument xDocument = new XmlDocument();
+				//xDocument.LoadXml(stringBuilder.ToString());
 				stringBuilder.Append(xDocument.ToString());
 				return stringBuilder.ToString();
 			}
@@ -25,7 +28,7 @@ namespace FiddlerExtensions
 			get
 			{
 				StringBuilder stringBuilder = new StringBuilder();
-				stringBuilder.Append("<jmeterTestPlan version=\"1.2\" properties=\"2.3\">");   //jmx文件头
+				stringBuilder.Append("<jmeterTestPlan version=\"1.2\" properties=\"5.0\">");   //jmx文件头
 				stringBuilder.Append(this.sessionList.Xml);     //调用HTTPSamplerProxy向xml写入特定规则的组件
 				stringBuilder.Append("</jmeterTestPlan>");		//jmx文件尾
 				return stringBuilder.ToString();
